@@ -5,11 +5,16 @@ RUN 	apt-get -qq update \
 	&& echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal main\ndeb-src http://apt.llvm.org/focal/ llvm-toolchain-focal main" > /etc/apt/sources.list.d/llvm.list \
 	&& wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc \
 	&& apt-get -qq update \
-	&& apt-get install -qqy clang-tidy-18 \
 	&& DEBIAN_FRONTEND=noninteractive TZ=Asia/Kolkata apt-get install -qqy \
-        	sudo git build-essential make \
+        	sudo git build-essential make clang-tidy-18 lld-18 clang-18 llvm-18 \
 	&& apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/*
+
+RUN 	mkdir /opt/cmake \
+	&& cd /opt/cmake \
+	&& wget 'https://github.com/Kitware/CMake/releases/download/v3.27.3/cmake-3.27.3-linux-x86_64.sh' \
+	&& bash cmake-3.27.3-linux-x86_64.sh --prefix=/usr/local/ --skip-license \
+	&& rm -f cmake-3.27.3-linux-x86_64.sh
 
 RUN 	mkdir /arm \
 	&&  mkdir /tmp/12.3.1 \
@@ -30,24 +35,6 @@ RUN 	mkdir /arm \
 	&& tar -xf *.tar.bz2 \
 	&& rm -f *.tar.bz2 \
 	&& mv * /arm/7.3.1
-
-RUN 	mkdir /opt/cmake \
-	&& cd /opt/cmake \
-	&& wget 'https://github.com/Kitware/CMake/releases/download/v3.27.3/cmake-3.27.3-linux-x86_64.sh' \
-	&& bash cmake-3.27.3-linux-x86_64.sh --prefix=/usr/local/ --skip-license \
-	&& rm -f cmake-3.27.3-linux-x86_64.sh
-
-RUN 	mkdir /opt/llvm \
-	&& cd /opt/llvm \
-	&& git clone --depth=1 https://github.com/llvm/llvm-project llvm-project \
-	&& cd /opt/llvm/llvm-project \
-	&& mkdir build \
-	&& cd /opt/llvm/llvm-project/build \
-	&& cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=lld -DCMAKE_INSTALL_PREFIX=/usr/local ../llvm \
-	&& make -j$(nproc) \
-	&& make install \
-	&& cd / \
-	&& rm -rf /opt/llvm/*
 
 ARG USER=ubuntu
 
