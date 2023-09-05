@@ -23,19 +23,8 @@ RUN 	mkdir /arm \
 	&& tar -xf *.tar.xz \
 	&& rm -f *.tar.xz \
 	&& mv * /arm/12.3.1 \
-	&& mkdir /tmp/arm-8.2.1 \
-	&& cd /tmp/arm-8.2.1 \
-	&& wget 'https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2' \
-	&& tar -xf *.tar.bz2 \
-	&& rm -f *.tar.bz2 \
-	&& mv * /arm/8.2.1 \
-	&& mkdir /tmp/arm-7.3.1 \
-	&& cd /tmp/arm-7.3.1 \
-	&& wget 'https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2' \
-	&& tar -xf *.tar.bz2 \
-	&& rm -f *.tar.bz2 \
-	&& mv * /arm/7.3.1
-
+	&& ln -s /arm/12.3.1 /arm/default
+	
 ARG USER=ubuntu
 
 RUN 	useradd -m $USER \
