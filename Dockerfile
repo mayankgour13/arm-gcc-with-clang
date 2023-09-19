@@ -24,6 +24,8 @@ RUN 	mkdir /arm \
 	&& rm -f *.tar.xz \
 	&& mv * /arm/12.3.1 \
 	&& ln -s /arm/12.3.1 /arm/default
+
+ENV PATH="${PATH}:/arm/12.3.1/bin"
 	
 ARG USER=ubuntu
 
