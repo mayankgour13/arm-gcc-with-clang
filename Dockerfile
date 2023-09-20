@@ -1,12 +1,14 @@
 FROM ubuntu:20.04
 
 RUN 	apt-get -qq update \
-	&& apt-get install -qqy wget \
+	&& apt-get install -qqy wget software-properties-common \
+	&& add-apt-repository ppa:ubuntu-toolchain-r/test \
 	&& echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal main\ndeb-src http://apt.llvm.org/focal/ llvm-toolchain-focal main" > /etc/apt/sources.list.d/llvm.list \
 	&& wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc \
 	&& apt-get -qq update \
 	&& DEBIAN_FRONTEND=noninteractive TZ=Asia/Kolkata apt-get install -qqy \
-        	sudo git build-essential make clang-tidy-18 lld-18 clang-18 llvm-18 \
+        	sudo gcc-11 g++-11 git make clang-tidy-18 lld-18 clang-18 llvm-18 gcovr \
+	&& update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 11 --slave /usr/bin/g++ g++ /usr/bin/g++-11 \
 	&& apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/*
 
