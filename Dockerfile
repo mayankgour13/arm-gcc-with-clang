@@ -14,12 +14,6 @@ RUN 	apt-get -qq update \
 	&& apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/*
 
-#RUN 	mkdir /opt/cmake \
-#	&& cd /opt/cmake \
-#	&& wget 'https://github.com/Kitware/CMake/releases/download/v3.27.3/cmake-3.27.3-linux-x86_64.sh' \
-#	&& bash cmake-3.27.3-linux-x86_64.sh --prefix=/usr/local/ --skip-license \
-#	&& rm -f cmake-3.27.3-linux-x86_64.sh
-
 RUN 	mkdir /arm \
 	&&  mkdir /tmp/12.3.1 \
 	&& cd /tmp/12.3.1 \
@@ -30,17 +24,6 @@ RUN 	mkdir /arm \
 	&& ln -s /arm/12.3.1 /arm/default
 
 ENV PATH="${PATH}:/arm/12.3.1/bin"
-	
-ARG USER=ubuntu
-
-RUN 	useradd -m $USER \
-	&& echo "$USER:$USER" | chpasswd \
-	&& adduser $USER sudo \
-	&& mkdir -p /etc/sudoers.d \
-        && echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER \
-        && chmod 0440 /etc/sudoers.d/$USER
-
-USER $USER
 
 WORKDIR /app
 
